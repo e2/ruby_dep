@@ -6,13 +6,17 @@
 
 Your gem doesn't support all possible Ruby versions.
 
+And not all Ruby versions are secure to even have installed.
+
 So, you need to tell users which Ruby versions you support in:
 
 1. Your gemspec
 2. Your README
 3. Your .travis.yml file
+4. Any issues you get about which version of Ruby is supported or not
 
-That breaks the principle of single responsibility.
+But maintaning that information in 4 different places breaks the principle of
+single responsibility.
 
 
 ## The solution
@@ -23,11 +27,14 @@ It assumes you are using Travis and the versions listed in your `.travis.yml` ar
 
 This helps you limit the Ruby versions you support - just by adding/removing entries in your Travis configuration file.
 
+Also, you it can warn users if they are using an outdated version of Ruby.
+
+(Or one with security vulnerabilities).
 
 
 ## Usage
 
-E.g. in your gemspec file:
+1. E.g. in your gemspec file:
 
 ```ruby
   begin
@@ -40,15 +47,21 @@ E.g. in your gemspec file:
   s.add_development_dependency 'ruby_dep', '~> 1.0'
 ```
 
-In your `README.md`:
+2. In your `README.md`:
 
 Replace your mentions of "supported Ruby versions" to point to the Travis build.
 
 (Or, you can point to the rubygems.org site where the required Ruby version is listed).
 
-If it works on Travis, it's assumed to be supported, right? 
+If it works on Travis, it's assumed to be supported, right?
 
 If it fails, it isn't, right?
+
+3. In your library:
+
+require 'ruby_dep/warnings'
+RubyDep::Warning.show_warnings
+
 
 ## Roadmap
 
