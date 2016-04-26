@@ -44,7 +44,7 @@ Also, you it can warn users if they are using an outdated version of Ruby.
     abort "Install 'ruby_dep' gem before building this gem"
   end
 
-  s.add_development_dependency 'ruby_dep', '~> 1.0'
+  s.add_development_dependency 'ruby_dep', '~> 1.1'
 ```
 
 ### In your `README.md`:
