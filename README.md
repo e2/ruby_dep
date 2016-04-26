@@ -1,5 +1,7 @@
 # RubyDep
 
+[![Gem Version](https://img.shields.io/gem/v/guard.svg?style=flat)](https://rubygems.org/gems/guard) [![Build Status](https://travis-ci.org/guard/guard.svg)](https://travis-ci.org/guard/guard)
+
 ## The problem
 
 Your gem doesn't support all possible Ruby versions.
