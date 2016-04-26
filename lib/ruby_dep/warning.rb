@@ -6,12 +6,16 @@ module RubyDep
     MSG_INSECURE = 'RubyDep: WARNING: your Ruby has security vulnerabilities!'\
       ' Please upgrade!'.freeze
 
+    MSG_HOW_TO_DISABLE = ' (To disable warnings, set'\
+      ' RUBY_DEP_GEM_SILENCE_WARNINGS=1)'.freeze
+
     def show_warnings
+      return if silenced?
       case check_ruby
       when :insecure
-        STDERR.puts MSG_INSECURE
+        STDERR.puts MSG_INSECURE + MSG_HOW_TO_DISABLE
       when :buggy
-        STDERR.puts MSG_BUGGY
+        STDERR.puts MSG_BUGGY + MSG_HOW_TO_DISABLE
       when :unknown
       else
         raise "Unknown problem type: #{problem.inspect}"
@@ -36,6 +40,11 @@ module RubyDep
         return status if version >= Gem::Version.new(ruby)
       end
       :insecure
+    end
+
+    def silenced?
+      value = ENV['RUBY_DEP_GEM_SILENCE_WARNINGS']
+      (value || '0') !~ /^0|false|no|n$/
     end
   end
 end
