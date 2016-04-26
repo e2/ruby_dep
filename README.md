@@ -1,6 +1,6 @@
 # RubyDep
 
-[![Gem Version](https://img.shields.io/gem/v/no_deps.svg?style=flat)](https://rubygems.org/gems/no_deps) [![Build Status](https://travis-ci.org/e2/no_deps.svg)](https://travis-ci.org/e2/no_deps)
+[![Gem Version](https://img.shields.io/gem/v/ruby_dep.svg?style=flat)](https://rubygems.org/gems/ruby_dep) [![Build Status](https://travis-ci.org/e2/ruby_dep.svg)](https://travis-ci.org/e2/ruby_dep)
 
 ## The problem
 
