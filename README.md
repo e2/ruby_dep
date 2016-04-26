@@ -1,54 +1,59 @@
 # RubyDep
 
-Helps with various Ruby version management activities, such as:
+## The problem
 
-1. Reading supported Ruby version from a .travis.yml file
-2. More stuff planned (reading TargetRubyVersion from .rubocop.yml file?)
+Your gem doesn't support all possible Ruby versions.
 
-Reason: tests are the best indicator of compatibility.
+So, you need to tell users which Ruby versions you support in:
 
-So, it doesn't make mention the supported Ruby version(s) in:
+1. Your gemspec
+2. Your README
+3. Your .travis.yml file
 
-1. your gemspec
-2. your README
-3. your .travis.yml file
-
-(That breaks the principle of single responsibility).
-
-Instead, it's better to:
-
-- point to the Travis build in your README (or your gem home page on rubygems.org)
-- extract the supported versions from your .travis.yml
-- set the versions automatically in your Gemspec
+That breaks the principle of single responsibility.
 
 
-## Installation
+## The solution
 
-Add this line to your application's Gemfile:
+This gems detects which versions of Ruby your project supports.
 
-```ruby
-gem 'ruby_dep'
-```
+It assumes you are using Travis and the versions listed in your `.travis.yml` are supported.
 
-And then execute:
+This helps you limit the Ruby versions you support - just by adding/removing entries in your Travis configuration file.
 
-    $ bundle
 
-Or install it yourself as:
-
-    $ gem install ruby_dep
 
 ## Usage
 
 E.g. in your gemspec file:
 
 ```ruby
-require 'ruby_dep'
+  begin
+    require "ruby_dep/travis"
+    s.required_ruby_version = RubyDep::Travis.new.version_constraint
+  rescue LoadError
+    abort "Install 'ruby_dep' gem before building this gem"
+  end
 
-# (...)
-
-spec.required_ruby_version = RubyDep::Travis.new.version_constraint
+  s.add_development_dependency 'ruby_dep', '~> 1.0'
 ```
+
+In your `README.md`:
+
+Replace your mentions of "supported Ruby versions" to point to the Travis build.
+
+(Or, you can point to the rubygems.org site where the required Ruby version is listed).
+
+If it works on Travis, it's assumed to be supported, right? 
+
+If it fails, it isn't, right?
+
+## Roadmap
+
+Pull Requests are welcome.
+
+Plans include: reading supported Ruby from `.rubocop.yml` (`TargetRubyVersion` field).
+
 
 ## Development
 
