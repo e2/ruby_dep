@@ -1,6 +1,6 @@
 # RubyDep
 
-[![Gem Version](https://img.shields.io/gem/v/guard.svg?style=flat)](https://rubygems.org/gems/guard) [![Build Status](https://travis-ci.org/guard/guard.svg)](https://travis-ci.org/guard/guard)
+[![Gem Version](https://img.shields.io/gem/v/no_deps.svg?style=flat)](https://rubygems.org/gems/no_deps) [![Build Status](https://travis-ci.org/e2/no_deps.svg)](https://travis-ci.org/e2/no_deps)
 
 ## The problem
 
