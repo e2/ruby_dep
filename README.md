@@ -34,7 +34,7 @@ Also, you it can warn users if they are using an outdated version of Ruby.
 
 ## Usage
 
-1. E.g. in your gemspec file:
+### E.g. in your gemspec file:
 
 ```ruby
   begin
@@ -47,7 +47,7 @@ Also, you it can warn users if they are using an outdated version of Ruby.
   s.add_development_dependency 'ruby_dep', '~> 1.0'
 ```
 
-2. In your `README.md`:
+### In your `README.md`:
 
 Replace your mentions of "supported Ruby versions" to point to the Travis build.
 
@@ -57,7 +57,7 @@ If it works on Travis, it's assumed to be supported, right?
 
 If it fails, it isn't, right?
 
-3. In your library:
+### In your library:
 
 require 'ruby_dep/warnings'
 RubyDep::Warning.show_warnings
