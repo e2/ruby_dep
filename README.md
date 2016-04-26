@@ -59,8 +59,16 @@ If it fails, it isn't, right?
 
 ### In your library:
 
+```ruby
 require 'ruby_dep/warnings'
 RubyDep::Warning.show_warnings
+```
+
+## Tips
+
+To disable warnings, just set the following environment variable:
+
+`RUBY_DEP_GEM_SILENCE_WARNINGS=1`
 
 
 ## Roadmap
