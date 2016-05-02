@@ -4,7 +4,10 @@ RSpec.describe RubyDep::Warning do
   before do
     allow(STDERR).to receive(:puts)
     stub_const('RUBY_VERSION', ruby_version)
+    stub_const('RUBY_ENGINE', ruby_engine)
   end
+
+  let(:ruby_engine) { 'ruby' }
 
   describe '#show_warnings' do
     context 'when silenced' do
@@ -57,6 +60,29 @@ RSpec.describe RubyDep::Warning do
           expect(STDERR).to receive(:puts).with(
             /RubyDep: WARNING: your Ruby has security vulnerabilities!/)
           subject.show_warnings
+        end
+      end
+
+      context 'with JRuby' do
+        context 'when the JRuby is not known to be vulnerable' do
+          let(:ruby_version) { '2.2.3' }
+          let(:ruby_engine) { 'jruby' }
+          it 'does not show warning about vulnerability' do
+            expect(STDERR).to_not receive(:puts)
+            subject.show_warnings
+          end
+        end
+      end
+
+      context 'with an untracked ruby' do
+        context 'when the JRuby is not known to be vulnerable' do
+          let(:ruby_version) { '1.2.3' }
+          let(:ruby_engine) { 'ironruby' }
+          it 'shows warning about vulnerability' do
+            expect(STDERR).to receive(:puts).with(
+              /RubyDep: WARNING: your Ruby has security vulnerabilities!/)
+            subject.show_warnings
+          end
         end
       end
     end
