@@ -1,5 +1,7 @@
 require 'yaml'
 
+require 'ruby_dep/travis/ruby_version'
+
 module RubyDep
   class Travis
     def version_constraint(filename = '.travis.yml')
@@ -10,13 +12,15 @@ module RubyDep
       lowest = lowest_supported(selected)
 
       ["~> #{lowest[0..1].join('.')}", ">= #{lowest.join('.')}"]
+    rescue RubyVersion::Error => ex
+      abort("RubyDep Error: #{ex.message}")
     end
 
     private
 
     def versions_for_latest_major(versions)
       by_major = versions.map do |x|
-        Gem::Version.new(x).segments[0..2]
+        RubyVersion.new(x).segments[0..2]
       end.group_by(&:first)
 
       last_supported_major = by_major.keys.sort.last

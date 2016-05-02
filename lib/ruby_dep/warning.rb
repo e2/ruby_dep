@@ -25,18 +25,26 @@ module RubyDep
     private
 
     VERSION_INFO = {
-      '2.3.1' => :unknown,
-      '2.3.0' => :buggy,
-      '2.2.5' => :unknown,
-      '2.2.4' => :buggy,
-      '2.2.0' => :insecure,
-      '2.1.9' => :buggy,
-      '2.0.0' => :insecure
+      'ruby' => {
+        '2.3.1' => :unknown,
+        '2.3.0' => :buggy,
+        '2.2.5' => :unknown,
+        '2.2.4' => :buggy,
+        '2.2.0' => :insecure,
+        '2.1.9' => :buggy,
+        '2.0.0' => :insecure
+      },
+
+      'jruby' => {
+        '2.2.3' => :unknown, # jruby-9.0.5.0
+        '2.2.0' => :insecure
+      }
     }.freeze
 
     def check_ruby
       version = Gem::Version.new(RUBY_VERSION)
-      VERSION_INFO.each do |ruby, status|
+      info = VERSION_INFO[RUBY_ENGINE] || {}
+      info.each do |ruby, status|
         return status if version >= Gem::Version.new(ruby)
       end
       :insecure
