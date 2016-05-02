@@ -21,7 +21,17 @@ Gem::Specification.new do |spec|
   spec.required_ruby_version = RubyDep::Travis.new.version_constraint
 
   spec.files = `git ls-files -z`.split("\x0").reject do |f|
-    f.match(%r{^(?:(?:test|spec|features)/)|(?:(?:bin/console|bin/setup|Rakefile|Gemfile|Guardfile|ruby_dep\.gemspec))$})
+    f.match(
+      %r{^
+      (?:
+       (?:test|spec|features)
+      /) # directories
+      |
+      (?:
+       (?:bin/console|bin/setup|Rakefile|Gemfile|Guardfile|ruby_dep\.gemspec)
+      $) # files
+      }x
+    )
   end
 
   spec.bindir        = 'exe'
