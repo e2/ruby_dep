@@ -2,6 +2,9 @@
 
 [![Gem Version](https://img.shields.io/gem/v/ruby_dep.svg?style=flat)](https://rubygems.org/gems/ruby_dep) [![Build Status](https://travis-ci.org/e2/ruby_dep.svg)](https://travis-ci.org/e2/ruby_dep)
 
+NOTE: For currently supported Ruby versions, [check out the Travis build status](https://travis-ci.org/e2/ruby_dep). If you need support for an different/older version of Ruby, open an issue with "backport" in the title and provide a compelling case for supporting the version of Ruby you need. When in doubt, open a new issue.
+
+
 ## The problem
 
 Your gem shouldn't (and likely doesn't) support all possible Ruby versions.
@@ -76,13 +79,13 @@ To disable warnings, just set the following environment variable:
 
 `RUBY_DEP_GEM_SILENCE_WARNINGS=1`
 
-You can follow these rules of thumb:
+You can follow these rules of thumb, whether you use RubyDep or not:
 
 1. Avoid changing major version numbers, even if you're dropping a major version of Ruby (e.g. 1.9.2)
-2. If you want to support a current version, add it to your `.travis.yml` (e.g. Ruby 2.3.1)
+2. If you want to support a current version, add it to your `.travis.yml` (e.g. ruby-2.3.1)
 3. To support an earlier version of Ruby, add it to your `.travis.yml` and release a new gem version.
-4. If you want to support a range of Rubies, include the whole range without gaps in minor version numbers (e.g. 2.0.0, 2.1.0, 2.2.0, 2.3.0)
-5. If you just want to test a Ruby version (but not actually support it), put it into the "allow failures" part of your Travis build matrix.
+4. If you want to support a range of Rubies, include the whole range without gaps in minor version numbers (e.g. 2.0.0, 2.1.0, 2.2.0, 2.3.0) and ruby_dep will use the whole range. (If there's a gap, older versions will be considered "unsupported")
+5. If you just want to test a Ruby version (but not actually support it), put it into the "allow failures" part of your Travis build matrix. (ruby_dep ignores versions there).
 6. If you want to drop support for a Ruby, remove it from the `.travis.yml` and just bump your gem's minor number.
 
 When in doubt, open an issue and just ask.
