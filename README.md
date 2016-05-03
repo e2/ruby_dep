@@ -2,7 +2,7 @@
 
 [![Gem Version](https://img.shields.io/gem/v/ruby_dep.svg?style=flat)](https://rubygems.org/gems/ruby_dep) [![Build Status](https://travis-ci.org/e2/ruby_dep.svg)](https://travis-ci.org/e2/ruby_dep)
 
-NOTE: For currently supported Ruby versions, [check out the Travis build status](https://travis-ci.org/e2/ruby_dep). If you need support for an different/older version of Ruby, open an issue with "backport" in the title and provide a compelling case for supporting the version of Ruby you need. When in doubt, open a new issue.
+NOTE: For currently supported Ruby versions, [check out the Travis build status](https://travis-ci.org/e2/ruby_dep). If you need support for an different/older version of Ruby, open an issue with "backport" in the title and provide a compelling case for supporting the version of Ruby you need. When in doubt, open a new issue or [read the FAQ on the Wiki](https://github.com/e2/ruby_dep/wiki/FAQ).
 
 
 ## The problem
