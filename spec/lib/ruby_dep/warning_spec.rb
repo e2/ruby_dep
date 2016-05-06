@@ -10,6 +10,10 @@ RSpec.describe RubyDep::Warning do
 
   let(:ruby_engine) { 'ruby' }
 
+  def rquote(str)
+    Regexp.new(Regexp.quote(str))
+  end
+
   describe '#show_warnings' do
     before { subject.show_warnings }
     context 'when silenced' do
@@ -40,7 +44,14 @@ RSpec.describe RubyDep::Warning do
         let(:ruby_version) { '2.2.4' }
         it 'shows warning about bugs' do
           expect(STDERR).to have_received(:puts).with(
-            %r{RubyDep: WARNING: your Ruby is outdated\/buggy.})
+            %r{Your Ruby is outdated\/buggy.})
+        end
+
+        it 'shows recommended action' do
+          expected = rquote(
+            'Your Ruby is: 2.2.4 (buggy). Recommendation: install'\
+            ' 2.2.5 or 2.3.1')
+          expect(STDERR).to have_received(:puts).with(expected)
         end
       end
 
@@ -48,7 +59,14 @@ RSpec.describe RubyDep::Warning do
         let(:ruby_version) { '2.2.3' }
         it 'shows warning about vulnerability' do
           expect(STDERR).to have_received(:puts).with(
-            /RubyDep: WARNING: your Ruby has security vulnerabilities!/)
+            /Your Ruby has security vulnerabilities!/)
+        end
+
+        it 'shows recommended action' do
+          expected = rquote(
+            'Your Ruby is: 2.2.3 (insecure). Recommendation:'\
+            ' install 2.2.5 or 2.3.1. (Or, at least to 2.2.4 or 2.3.0)')
+          expect(STDERR).to have_received(:puts).with(expected)
         end
       end
 
@@ -56,7 +74,14 @@ RSpec.describe RubyDep::Warning do
         let(:ruby_version) { '2.2.0' }
         it 'shows warning about vulnerability' do
           expect(STDERR).to have_received(:puts).with(
-            /RubyDep: WARNING: your Ruby has security vulnerabilities!/)
+            /Your Ruby has security vulnerabilities!/)
+        end
+
+        it 'shows recommended action' do
+          expected = rquote(
+            'Your Ruby is: 2.2.0 (insecure). Recommendation: install 2.2.5'\
+            ' or 2.3.1. (Or, at least to 2.2.4 or 2.3.0)')
+          expect(STDERR).to have_received(:puts).with(expected)
         end
       end
 
@@ -64,7 +89,14 @@ RSpec.describe RubyDep::Warning do
         let(:ruby_version) { '1.9.3' }
         it 'shows warning about vulnerability' do
           expect(STDERR).to have_received(:puts).with(
-            /RubyDep: WARNING: your Ruby has security vulnerabilities!/)
+            /Your Ruby has security vulnerabilities!/)
+        end
+
+        it 'shows recommended action' do
+          expected = rquote(
+            'Your Ruby is: 1.9.3 (insecure). Recommendation: install 2.2.5'\
+            ' or 2.3.1. (Or, at least to 2.1.9 or 2.2.4 or 2.3.0)')
+          expect(STDERR).to have_received(:puts).with(expected)
         end
       end
 
@@ -75,6 +107,12 @@ RSpec.describe RubyDep::Warning do
           it 'does not show warning about vulnerability' do
             expect(STDERR).to_not have_received(:puts)
           end
+
+          it 'does not show a recommendation' do
+            expect(STDERR).to_not have_received(:puts).with(
+              /RubyDep: Your Ruby is:/)
+            expect(STDERR).to_not have_received(:puts).with(/Recommendation:/)
+          end
         end
       end
 
@@ -84,7 +122,15 @@ RSpec.describe RubyDep::Warning do
           let(:ruby_engine) { 'ironruby' }
           it 'shows warning about vulnerability' do
             expect(STDERR).to have_received(:puts).with(
-              /RubyDep: WARNING: your Ruby has security vulnerabilities!/)
+              /Your Ruby has security vulnerabilities!/)
+          end
+
+          it 'shows recommended action' do
+            expected = rquote(
+              "Your Ruby is: 1.2.3 'ironruby' (unrecognized). If this"\
+              ' version is important, please open an issue at'\
+              ' http://github.com/e2/ruby_dep')
+            expect(STDERR).to have_received(:puts).with(expected)
           end
         end
       end
