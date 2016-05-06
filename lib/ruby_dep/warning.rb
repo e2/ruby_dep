@@ -43,8 +43,7 @@ module RubyDep
 
     def check_ruby
       version = Gem::Version.new(RUBY_VERSION)
-      info = VERSION_INFO[RUBY_ENGINE] || {}
-      info.each do |ruby, status|
+      current_ruby_info.each do |ruby, status|
         return status if version >= Gem::Version.new(ruby)
       end
       :insecure
@@ -53,6 +52,10 @@ module RubyDep
     def silenced?
       value = ENV['RUBY_DEP_GEM_SILENCE_WARNINGS']
       (value || '0') !~ /^0|false|no|n$/
+    end
+
+    def current_ruby_info
+      VERSION_INFO[RUBY_ENGINE] || {}
     end
   end
 end
