@@ -2,6 +2,8 @@ sudo: false
 language: ruby
 bundler_args: --without development
 rvm:
+  - 2.0.0
+  - 2.1.9
   - 2.2.4
   - jruby-9.0.5.0
 before_install: gem install bundler -v 1.12.1
