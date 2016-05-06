@@ -53,7 +53,7 @@ RSpec.describe RubyDep::Warning do
       end
 
       context 'with an insecure base Ruby' do
-        let(:ruby_version) { '2.2.3' }
+        let(:ruby_version) { '2.2.0' }
         it 'shows warning about vulnerability' do
           expect(STDERR).to have_received(:puts).with(
             /RubyDep: WARNING: your Ruby has security vulnerabilities!/)
@@ -79,7 +79,7 @@ RSpec.describe RubyDep::Warning do
       end
 
       context 'with an untracked ruby' do
-        context 'when the JRuby is not known to be vulnerable' do
+        context 'when the Ruby is not listed' do
           let(:ruby_version) { '1.2.3' }
           let(:ruby_engine) { 'ironruby' }
           it 'shows warning about vulnerability' do
