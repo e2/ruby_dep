@@ -41,6 +41,8 @@ With RubyDep, your gemspec's `required_ruby_version` can be automatically set ba
 
 What about the README? Well, just insert a link to your Travis build status page!
 
+Example: do you want to know which Ruby versions RubyDep can be installed on? Just look here: https://travis-ci.org/e2/ruby_dep
+
 If you're running Travis builds on a Ruby you support (and it's not in the "allow failures" section), it means you support that version of Ruby, right?
 
 RubyDep intelligently creates a version constraint to encompass Rubies listed in your `.travis.yml`.
