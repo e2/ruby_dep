@@ -116,6 +116,22 @@ RSpec.describe RubyDep::Warning do
         end
       end
 
+      context 'with JRuby head' do
+        context 'when the JRuby is not known to be vulnerable' do
+          let(:ruby_version) { '2.3.0' }
+          let(:ruby_engine) { 'jruby' }
+          it 'does not show warning about vulnerability' do
+            expect(STDERR).to_not have_received(:puts)
+          end
+
+          it 'does not show a recommendation' do
+            expect(STDERR).to_not have_received(:puts).with(
+              /RubyDep: Your Ruby is:/)
+            expect(STDERR).to_not have_received(:puts).with(/Recommendation:/)
+          end
+        end
+      end
+
       context 'with an untracked ruby' do
         context 'when the Ruby is not listed' do
           let(:ruby_version) { '1.2.3' }
