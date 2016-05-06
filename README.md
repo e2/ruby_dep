@@ -64,11 +64,11 @@ RubyDep intelligently creates a version constraint to encompass Rubies listed in
 
 ### In your `README.md`:
 
-Replace your mentions of "supported Ruby versions" to point to the Travis build.
+Replace your mentions of "supported Ruby versions" and just insert a link to your Travis build status page.
 
-If users see their Ruby version "green" on Travis, it suggests it's supported, right?
+If users see their Ruby version "green" on Travis, they'll see those are the versions you support and test, right?
 
-(Or, you can point to the rubygems.org site where the required Ruby version is listed).
+(Or, you can link to your project's rubygems.org page where the required Ruby version is listed).
 
 ### In your `.travis.yml`:
 
