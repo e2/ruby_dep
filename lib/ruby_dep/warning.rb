@@ -1,96 +1,93 @@
+require 'ruby_dep/logger'
+require 'ruby_dep/ruby_version'
+
 module RubyDep
+  PROJECT_URL = 'http://github.com/e2/ruby_dep'.freeze
+
   class Warning
+    DISABLING_ENVIRONMENT_VAR = 'RUBY_DEP_GEM_SILENCE_WARNINGS'.freeze
     PREFIX = 'RubyDep: WARNING: '.freeze
-    MSG_BUGGY = 'Your Ruby is outdated/buggy.'.freeze
-    MSG_INSECURE = 'Your Ruby has security vulnerabilities!'.freeze
 
-    MSG_HOW_TO_DISABLE = ' (To disable warnings, set'\
-      ' RUBY_DEP_GEM_SILENCE_WARNINGS=1)'.freeze
+    WARNING = {
+      insecure: 'Your Ruby has security vulnerabilities!'.freeze,
+      buggy: 'Your Ruby is outdated/buggy.'.freeze,
+      untracked: 'Your Ruby may not be supported.'.freeze
+    }.freeze
 
-    OPEN_ISSUE_FOR_UNRECOGNIZED = 'If this version is important,'\
-      ' please open an issue at http://github.com/e2/ruby_dep'.freeze
+    NOTICE_RECOMMENDATION = 'Your Ruby is: %s (%s).'\
+      ' Recommendation: upgrade to %s.'.freeze
+
+    NOTICE_BUGGY_ALTERNATIVE = '(Or, at least to %s)'.freeze
+
+    NOTICE_HOW_TO_DISABLE = '(To disable warnings, set'\
+      " #{DISABLING_ENVIRONMENT_VAR}=1)".freeze
+
+    NOTICE_OPEN_ISSUE = 'If you need this version supported,'\
+      " please open an issue at #{PROJECT_URL}".freeze
+
+    def initialize
+      @version = RubyVersion.new(RUBY_VERSION, RUBY_ENGINE)
+      @logger = Logger.new(STDERR, PREFIX)
+    end
 
     def show_warnings
       return if silenced?
-      case (status = check_ruby)
-      when :insecure
-        warn_ruby(MSG_INSECURE, status)
-      when :buggy
-        warn_ruby(MSG_BUGGY, status)
-      when :unknown
-      else
-        raise "Unknown problem type: #{problem.inspect}"
-      end
+      return warn_ruby(WARNING[status]) if WARNING.key?(status)
+      return if status == :unknown
+      raise "Unknown problem type: #{problem.inspect}"
     end
 
     private
 
-    VERSION_INFO = {
-      'ruby' => {
-        '2.3.1' => :unknown,
-        '2.3.0' => :buggy,
-        '2.2.5' => :unknown,
-        '2.2.4' => :buggy,
-        '2.2.0' => :insecure,
-        '2.1.9' => :buggy,
-        '2.0.0' => :insecure
-      },
-
-      'jruby' => {
-        '2.2.3' => :unknown, # jruby-9.0.5.0
-        '2.2.0' => :insecure
-      }
-    }.freeze
-
-    def check_ruby
-      version = Gem::Version.new(RUBY_VERSION)
-      current_ruby_info.each do |ruby, status|
-        return status if version >= Gem::Version.new(ruby)
-      end
-      :insecure
-    end
-
     def silenced?
-      value = ENV['RUBY_DEP_GEM_SILENCE_WARNINGS']
+      value = ENV[DISABLING_ENVIRONMENT_VAR]
       (value || '0') !~ /^0|false|no|n$/
     end
 
-    def warn_ruby(msg, status)
-      STDERR.puts PREFIX + msg + MSG_HOW_TO_DISABLE
-      STDERR.puts PREFIX + recommendation(status)
+    def status
+      @version.status
     end
 
-    def recommendation(status)
-      msg = "Your Ruby is: #{RUBY_VERSION}"
-      return msg + recommendation_for_unknown unless recognized?
-
-      msg += " (#{status})."
-      msg += " Recommendation: install #{recommended(:unknown).join(' or ')}."
-      return msg unless status == :insecure
-
-      msg + " (Or, at least to #{recommended(:buggy).join(' or ')})"
+    def warn_ruby(msg)
+      @logger.warning(msg)
+      @logger.notice(recommendation)
+      @logger.notice(NOTICE_HOW_TO_DISABLE)
     end
 
-    def recommended(status)
-      current = Gem::Version.new(RUBY_VERSION)
-      current_ruby_info.select do |key, value|
-        value == status && Gem::Version.new(key) > current
-      end.keys.reverse
+    def recommendation
+      return unrecognized_msg unless @version.recognized?
+      return recommendation_msg unless status == :insecure
+      [recommendation_msg, safer_alternatives_msg].join(' ')
     end
 
-    def current_ruby_info
-      VERSION_INFO[RUBY_ENGINE] || {}
-    end
-
-    def recognized?
-      current_ruby_info.any?
-    end
-
-    def recommendation_for_unknown
+    def unrecognized_msg
       format(
-        " '%s' (unrecognized). %s", RUBY_ENGINE,
-        OPEN_ISSUE_FOR_UNRECOGNIZED
+        "Your Ruby is: %s '%s' (unrecognized). %s",
+        @version.version,
+        @version.engine,
+        NOTICE_OPEN_ISSUE
       )
+    end
+
+    def recommended_versions
+      @version.recommended(:unknown)
+    end
+
+    def buggy_alternatives
+      @version.recommended(:buggy)
+    end
+
+    def recommendation_msg
+      format(
+        NOTICE_RECOMMENDATION,
+        @version.version,
+        status,
+        recommended_versions.join(' or ')
+      )
+    end
+
+    def safer_alternatives_msg
+      format(NOTICE_BUGGY_ALTERNATIVE, buggy_alternatives.join(' or '))
     end
   end
 end
