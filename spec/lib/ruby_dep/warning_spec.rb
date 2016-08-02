@@ -1,14 +1,59 @@
 require 'ruby_dep/warning'
 
 RSpec.describe RubyDep::Warning do
-  before do
-    stub_const('STDERR', instance_double(IO))
-    stub_const('RUBY_VERSION', ruby_version)
-    stub_const('RUBY_ENGINE', ruby_engine)
-    allow(STDERR).to receive(:puts)
-  end
+  let(:logger) { instance_double(RubyDep::Logger) }
 
-  let(:ruby_engine) { 'ruby' }
+  let(:outdated_ruby) { instance_double(RubyDep::RubyVersion) }
+  let(:up_to_date_ruby) { instance_double(RubyDep::RubyVersion) }
+  let(:buggy_ruby) { instance_double(RubyDep::RubyVersion) }
+  let(:insecure_ruby) { instance_double(RubyDep::RubyVersion) }
+  let(:unsupported_ruby) { instance_double(RubyDep::RubyVersion) }
+  let(:untracked_engine_ruby) { instance_double(RubyDep::RubyVersion) }
+
+  before do
+    allow(RubyDep::Logger).to receive(:new)
+      .with(STDERR, 'RubyDep: WARNING: ').and_return(logger)
+    allow(logger).to receive(:warning)
+    allow(logger).to receive(:notice)
+
+    allow(RubyDep::RubyVersion).to receive(:new)
+      .with(RUBY_VERSION, RUBY_ENGINE).and_return(ruby_version)
+
+    allow(up_to_date_ruby).to receive(:version)
+      .and_return(Gem::Version.new('2.3.1'))
+    allow(up_to_date_ruby).to receive(:status).and_return(:unknown)
+
+    allow(buggy_ruby).to receive(:version)
+      .and_return(Gem::Version.new('2.2.4'))
+    allow(buggy_ruby).to receive(:status).and_return(:buggy)
+    allow(buggy_ruby).to receive(:recognized?).and_return(true)
+    allow(buggy_ruby).to receive(:recommended)
+      .with(:unknown).and_return(['2.2.5', '2.3.1'])
+
+    allow(insecure_ruby).to receive(:version)
+      .and_return(Gem::Version.new('2.2.3'))
+    allow(insecure_ruby).to receive(:status).and_return(:insecure)
+    allow(insecure_ruby).to receive(:recognized?).and_return(true)
+    allow(insecure_ruby).to receive(:recommended)
+      .with(:unknown).and_return(['2.2.5', '2.3.1'])
+    allow(insecure_ruby).to receive(:recommended)
+      .with(:buggy).and_return(['2.2.4', '2.3.0'])
+
+    allow(unsupported_ruby).to receive(:version)
+      .and_return(Gem::Version.new('1.9.3'))
+    allow(unsupported_ruby).to receive(:status).and_return(:insecure)
+    allow(unsupported_ruby).to receive(:recognized?).and_return(true)
+    allow(unsupported_ruby).to receive(:recommended)
+      .with(:unknown).and_return(['2.2.5', '2.3.1'])
+    allow(unsupported_ruby).to receive(:recommended)
+      .with(:buggy).and_return(['2.1.9', '2.2.4', '2.3.0'])
+
+    allow(untracked_engine_ruby).to receive(:version)
+      .and_return(Gem::Version.new('1.2.3'))
+    allow(untracked_engine_ruby).to receive(:status).and_return(:untracked)
+    allow(untracked_engine_ruby).to receive(:recognized?).and_return(false)
+    allow(untracked_engine_ruby).to receive(:engine).and_return('ironruby')
+  end
 
   def rquote(str)
     Regexp.new(Regexp.quote(str))
@@ -16,6 +61,7 @@ RSpec.describe RubyDep::Warning do
 
   describe '#show_warnings' do
     before { subject.show_warnings }
+
     context 'when silenced' do
       around do |example|
         old = ENV['RUBY_DEP_GEM_SILENCE_WARNINGS']
@@ -25,128 +71,82 @@ RSpec.describe RubyDep::Warning do
       end
 
       context 'with any outdated Ruby' do
-        let(:ruby_version) { '1.9.3' }
-        it 'does not show warning' do
-          expect(STDERR).to_not have_received(:puts)
+        let(:ruby_version) { outdated_ruby }
+        it 'does not show anything' do
+          expect(logger).to_not have_received(:warning)
+          expect(logger).to_not have_received(:notice)
         end
       end
     end
 
     context 'when not silenced' do
       context 'with an up-to-date Ruby' do
-        let(:ruby_version) { '2.3.1' }
-        it 'does not show warning' do
-          expect(STDERR).to_not have_received(:puts)
+        let(:ruby_version) { up_to_date_ruby }
+        it 'does not show anything' do
+          expect(logger).to_not have_received(:warning)
+          expect(logger).to_not have_received(:notice)
         end
       end
 
       context 'with a secure but buggy Ruby' do
-        let(:ruby_version) { '2.2.4' }
+        let(:ruby_version) { buggy_ruby }
         it 'shows warning about bugs' do
-          expect(STDERR).to have_received(:puts).with(
+          expect(logger).to have_received(:warning).with(
             %r{Your Ruby is outdated\/buggy.})
         end
 
         it 'shows recommended action' do
           expected = rquote(
-            'Your Ruby is: 2.2.4 (buggy). Recommendation: install'\
+            'Your Ruby is: 2.2.4 (buggy). Recommendation: upgrade to'\
             ' 2.2.5 or 2.3.1')
-          expect(STDERR).to have_received(:puts).with(expected)
+          expect(logger).to have_received(:notice).with(expected)
         end
       end
 
       context 'with an insecure Ruby' do
-        let(:ruby_version) { '2.2.3' }
+        let(:ruby_version) { insecure_ruby }
         it 'shows warning about vulnerability' do
-          expect(STDERR).to have_received(:puts).with(
+          expect(logger).to have_received(:warning).with(
             /Your Ruby has security vulnerabilities!/)
         end
 
         it 'shows recommended action' do
           expected = rquote(
             'Your Ruby is: 2.2.3 (insecure). Recommendation:'\
-            ' install 2.2.5 or 2.3.1. (Or, at least to 2.2.4 or 2.3.0)')
-          expect(STDERR).to have_received(:puts).with(expected)
-        end
-      end
-
-      context 'with an insecure base Ruby' do
-        let(:ruby_version) { '2.2.0' }
-        it 'shows warning about vulnerability' do
-          expect(STDERR).to have_received(:puts).with(
-            /Your Ruby has security vulnerabilities!/)
-        end
-
-        it 'shows recommended action' do
-          expected = rquote(
-            'Your Ruby is: 2.2.0 (insecure). Recommendation: install 2.2.5'\
-            ' or 2.3.1. (Or, at least to 2.2.4 or 2.3.0)')
-          expect(STDERR).to have_received(:puts).with(expected)
+            ' upgrade to 2.2.5 or 2.3.1. (Or, at least to 2.2.4 or 2.3.0)')
+          expect(logger).to have_received(:notice).with(expected)
         end
       end
 
       context 'with an unsupported Ruby' do
-        let(:ruby_version) { '1.9.3' }
+        let(:ruby_version) { unsupported_ruby }
         it 'shows warning about vulnerability' do
-          expect(STDERR).to have_received(:puts).with(
+          expect(logger).to have_received(:warning).with(
             /Your Ruby has security vulnerabilities!/)
         end
 
         it 'shows recommended action' do
           expected = rquote(
-            'Your Ruby is: 1.9.3 (insecure). Recommendation: install 2.2.5'\
+            'Your Ruby is: 1.9.3 (insecure). Recommendation: upgrade to 2.2.5'\
             ' or 2.3.1. (Or, at least to 2.1.9 or 2.2.4 or 2.3.0)')
-          expect(STDERR).to have_received(:puts).with(expected)
+          expect(logger).to have_received(:notice).with(expected)
         end
       end
 
-      context 'with JRuby' do
-        context 'when the JRuby is not known to be vulnerable' do
-          let(:ruby_version) { '2.2.3' }
-          let(:ruby_engine) { 'jruby' }
-          it 'does not show warning about vulnerability' do
-            expect(STDERR).to_not have_received(:puts)
-          end
-
-          it 'does not show a recommendation' do
-            expect(STDERR).to_not have_received(:puts).with(
-              /RubyDep: Your Ruby is:/)
-            expect(STDERR).to_not have_received(:puts).with(/Recommendation:/)
-          end
-        end
-      end
-
-      context 'with JRuby head' do
-        context 'when the JRuby is not known to be vulnerable' do
-          let(:ruby_version) { '2.3.0' }
-          let(:ruby_engine) { 'jruby' }
-          it 'does not show warning about vulnerability' do
-            expect(STDERR).to_not have_received(:puts)
-          end
-
-          it 'does not show a recommendation' do
-            expect(STDERR).to_not have_received(:puts).with(
-              /RubyDep: Your Ruby is:/)
-            expect(STDERR).to_not have_received(:puts).with(/Recommendation:/)
-          end
-        end
-      end
-
-      context 'with an untracked ruby' do
+      context 'with an untracked ruby engine' do
         context 'when the Ruby is not listed' do
-          let(:ruby_version) { '1.2.3' }
-          let(:ruby_engine) { 'ironruby' }
-          it 'shows warning about vulnerability' do
-            expect(STDERR).to have_received(:puts).with(
-              /Your Ruby has security vulnerabilities!/)
+          let(:ruby_version) { untracked_engine_ruby }
+          it 'shows warning about lack of support' do
+            expect(logger).to have_received(:warning).with(
+              /Your Ruby may not be supported./)
           end
 
           it 'shows recommended action' do
             expected = rquote(
-              "Your Ruby is: 1.2.3 'ironruby' (unrecognized). If this"\
-              ' version is important, please open an issue at'\
+              "Your Ruby is: 1.2.3 'ironruby' (unrecognized). If you need"\
+              ' this version supported, please open an issue at'\
               ' http://github.com/e2/ruby_dep')
-            expect(STDERR).to have_received(:puts).with(expected)
+            expect(logger).to have_received(:notice).with(expected)
           end
         end
       end
