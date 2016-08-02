@@ -36,6 +36,7 @@ module RubyDep
       },
 
       'jruby' => {
+        '2.3.0' => :unknown, # jruby-9.1.2.0, jruby-9.1.0.0
         '2.2.3' => :buggy, # jruby-9.0.5.0
         '2.2.0' => :insecure
       }
