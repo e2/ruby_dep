@@ -48,6 +48,8 @@ module RubyDep
       end
 
       def jruby_version(version)
+        return '2.3.0' if version == '9.1.2.0'
+        return '2.3.0' if version == '9.1.0.0'
         return '2.2.3' if version == '9.0.5.0'
         return '2.2.2' if version == '9.0.4.0'
         raise Error::Unrecognized::JRubyVersion, version

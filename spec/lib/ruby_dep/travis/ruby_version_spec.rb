@@ -79,5 +79,12 @@ RSpec.describe RubyDep::Travis::RubyVersion do
         expect(subject.segments).to eq([2, 1, 9])
       end
     end
+
+    context 'with JRuby 9.1.2.0' do
+      let(:travis_version_string) { 'jruby-9.1.2.0' }
+      it 'returns the Ruby implementation version segments' do
+        expect(subject.segments).to eq([2, 3, 0])
+      end
+    end
   end
 end
