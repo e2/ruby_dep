@@ -63,18 +63,37 @@ RSpec.describe RubyDep::Warning do
     before { subject.show_warnings }
 
     context 'when silenced' do
-      around do |example|
-        old = ENV['RUBY_DEP_GEM_SILENCE_WARNINGS']
-        ENV['RUBY_DEP_GEM_SILENCE_WARNINGS'] = '1'
-        example.run
-        ENV['RUBY_DEP_GEM_SILENCE_WARNINGS'] = old
+      context 'with an environment variable' do
+        around do |example|
+          old = ENV['RUBY_DEP_GEM_SILENCE_WARNINGS']
+          ENV['RUBY_DEP_GEM_SILENCE_WARNINGS'] = '1'
+          example.run
+          ENV['RUBY_DEP_GEM_SILENCE_WARNINGS'] = old
+        end
+
+        context 'with any outdated Ruby' do
+          let(:ruby_version) { outdated_ruby }
+          it 'does not show anything' do
+            expect(logger).to_not have_received(:warning)
+            expect(logger).to_not have_received(:notice)
+          end
+        end
       end
 
-      context 'with any outdated Ruby' do
-        let(:ruby_version) { outdated_ruby }
-        it 'does not show anything' do
-          expect(logger).to_not have_received(:warning)
-          expect(logger).to_not have_received(:notice)
+      context 'with a method call' do
+        around do |example|
+          old = ENV['RUBY_DEP_GEM_SILENCE_WARNINGS']
+          subject.silence!
+          example.run
+          ENV['RUBY_DEP_GEM_SILENCE_WARNINGS'] = old
+        end
+
+        context 'with any outdated Ruby' do
+          let(:ruby_version) { outdated_ruby }
+          it 'does not show anything' do
+            expect(logger).to_not have_received(:warning)
+            expect(logger).to_not have_received(:notice)
+          end
         end
       end
     end

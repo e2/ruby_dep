@@ -19,8 +19,8 @@ module RubyDep
 
     NOTICE_BUGGY_ALTERNATIVE = '(Or, at least to %s)'.freeze
 
-    NOTICE_HOW_TO_DISABLE = '(To disable warnings, set'\
-      " #{DISABLING_ENVIRONMENT_VAR}=1)".freeze
+    NOTICE_HOW_TO_DISABLE = '(To disable warnings, see:'\
+      "#{PROJECT_URL}/wiki/Disabling-warnings )".freeze
 
     NOTICE_OPEN_ISSUE = 'If you need this version supported,'\
       " please open an issue at #{PROJECT_URL}".freeze
@@ -35,6 +35,10 @@ module RubyDep
       return warn_ruby(WARNING[status]) if WARNING.key?(status)
       return if status == :unknown
       raise "Unknown problem type: #{problem.inspect}"
+    end
+
+    def silence!
+      ENV[DISABLING_ENVIRONMENT_VAR] = '1'
     end
 
     private

@@ -1,7 +1,7 @@
 
 module RubyDep
   class RubyVersion
-    attr_reader :status
+    attr_reader :status # NOTE: monkey-patched by acceptance tests
     attr_reader :version
     attr_reader :engine
 
