@@ -20,4 +20,6 @@ RSpec.configure do |config|
 
   config.order = :random
   Kernel.srand config.seed
+
+  config.filter_gems_from_backtrace 'gem_isolator', 'bundler'
 end
