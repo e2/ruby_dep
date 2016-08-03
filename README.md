@@ -4,16 +4,24 @@
 
 ## Description
 
-RubyDep helps users avoid incompatible, buggy and insecure Ruby versions.
+RubyDep does 2 things right now:
 
-It's for gem owners to add to their runtime dependencies in their gemspec.
+1. Helps end users avoid incompatible, buggy and insecure Ruby versions.
+2. Helps gem owners manage their gem's `required_ruby_version` gemspec field based on `.travis.yml`.
 
-1. It automatically sets your gemspec's `required_ruby_version` based on rubies tested in your `.travis-yml`
-2. It warns users of your project if they're using a buggy or vulnerable version of Ruby
+## Quick info
+
+- if you want to know how to disable the warnings, see here: https://github.com/e2/ruby_dep/wiki/Disabling-warnings
+- for a list of Ruby versions that can be used to install ruby_dep, see here: https://travis-ci.org/e2/ruby_dep
+- if your version of Ruby is not supported, open a new issue and explain your situation/problem
+- when in doubt, open a new issue or [read the FAQ on the Wiki](https://github.com/e2/ruby_dep/wiki/FAQ).
+- gems using RubyDep are designed to not be installable on a given Ruby version, unless it's specifically declared supported by those gems - but it's ok to ask for supporting your Ruby if you're stuck on an older version (for whatever reason)
+- discussions about Ruby versions can get complex and frustrating - please be patient and constructive, and open-minded about solutions - especially if you're having problems
+
+
+## Supported Ruby versions:
 
 NOTE: RubyDep uses it's own approach on itself. This means it can only be installed on Ruby versions tested here: [check out the Travis build status](https://travis-ci.org/e2/ruby_dep). If you need support for an different/older version of Ruby, open an issue with "backport" in the title and provide a compelling case for supporting the version of Ruby you need. 
-When in doubt, open a new issue or [read the FAQ on the Wiki](https://github.com/e2/ruby_dep/wiki/FAQ).
-
 
 ## Problem 1: "Which version of Ruby does your project support?"
 
