@@ -18,13 +18,13 @@ Show the awesome Ruby Core Team your support for their work by letting them focu
 
 If you can't upgrade Ruby because of the environment, work out how to do so anyway.
 
-E.g. if RVM doesn't install 2.2.5 for over 5 months, then obviously that project may need help or support of some kind. Help the RVM maintainers out - they're awesome! Or, fork the project and heroically take things into your own hands.
+E.g. if you can't install Ruby 2.2.5 on OSX due to RVM issues (even though Ruby 2.2.5 has been released over 5 months ago), then obviously the RVM project may need help or support of some kind. Help the RVM maintainers out - they're awesome! Or, fork the project and heroically take things into your own hands.
 
-If Apple (or Amazon or whatever hosting service or company) doesn't provide the latest supported version of Ruby, use Homebrew (or build from sources) or complain to those companies to provide support. It's unfair for them to prevent users from getting better/faster Rubies.
+If Apple (or Amazon or whatever hosting service or company) doesn't provide the latest recommended, supported version of Ruby, use Homebrew (or build from sources) or complain to those companies to provide support. It's unfair for them to prevent users from getting better/faster Rubies.
 
 ## 3. Upgrade Bundler (but even the most recent Bundler may not be enough!)
 
-Upgrade to a Bundler version that can downgrade the gems for you. If that doesn't help, try this workaround: https://github.com/guard/listen/wiki/Ruby-version-requirements
+Upgrade to a Bundler version that can automatically downgrade the gems for you. If that doesn't help, try this workaround: https://github.com/guard/listen/wiki/Ruby-version-requirements
 
 Work on this "downgrading" feature in Bundler is ongoing, so the best version of Bundler for the job may still be an unreleased version (beta, release candidate, etc.). 
 
@@ -32,14 +32,14 @@ Help the Bundler team out if you can - they're awesome!
 
 ## 4. If all else fails, learn SemVer and USE IT!
 
-Often, there are older versions of gems that support the Ruby version you need. See http://semver.org/ on how to set versions. Check out the release notes of the gems you need to know what you're getting (or missing out on).
+Often, there are older versions of gems that support the Ruby version you need. See http://semver.org/ on how to set version constraints. Then, check out the release notes of the gems you need to know what you're getting (or missing out on).
 
-E.g. You can downgrade to RubyDep 1.3.1 (`gem 'ruby_dep', '~> 1.3.1'`) to allow using Ruby 2.2.4
-E.g. You can use Listen 3.0.x (`gem 'listen', '~> 3.0.8'`) to avoid dealing with RubyDep and Listen.
+E.g. You can downgrade to RubyDep 1.3.1 (`gem 'ruby_dep', '~> 1.3.1'`) which allows using Ruby 2.2.4
+E.g. Or, You can use Listen 3.0.x (`gem 'listen', '~> 3.0.8'`) to avoid dealing with RubyDep and Listen.
 
-If those versions are lacking for any reason (e.g. bugs in Listen 3.0.x fixed in 3.1.x), then open a request for backporting changes to the 3.0.x branch.
+If those gem versions are lacking for any reason (e.g. bugs in Listen 3.0.x fixed in 3.1.x), then e.g. open a request for backporting changes to the 3.0.x branch.
 
-The idea: if you need the latest Ruby, then you probably don't need the latest of every gem either.
+The idea: if you don't need the latest Ruby ... then you probably don't need the latest of every gem either.
 
 ## 5. If all that isn't possible or it doesn't work ...
 
