@@ -24,22 +24,24 @@ If Apple (or Amazon or whatever hosting service or company) doesn't provide the 
 
 ## 3. Upgrade Bundler (but even the most recent Bundler may not be enough!)
 
-Upgrade to a Bundler version that can downgrade the gems for you. This work in Bundler is ongoing, so the best version of Bundler for the job may still be an unreleased version (beta, release candidate, etc.). 
+Upgrade to a Bundler version that can downgrade the gems for you. If that doesn't help, try this workaround: https://github.com/guard/listen/wiki/Ruby-version-requirements
+
+Work on this "downgrading" feature in Bundler is ongoing, so the best version of Bundler for the job may still be an unreleased version (beta, release candidate, etc.). 
 
 Help the Bundler team out if you can - they're awesome!
 
-## 3. If all else fails, learn SemVer and USE IT!
+## 4. If all else fails, learn SemVer and USE IT!
 
 Often, there are older versions of gems that support the Ruby version you need. See http://semver.org/ on how to set versions. Check out the release notes of the gems you need to know what you're getting (or missing out on).
 
 E.g. You can downgrade to RubyDep 1.3.1 (`gem 'ruby_dep', '~> 1.3.1'`) to allow using Ruby 2.2.4
-E.g. You can use Listen 3.0.x (`gem 'listen', '~> 3.0.8'`) to avoid dealing with RubyDep.
+E.g. You can use Listen 3.0.x (`gem 'listen', '~> 3.0.8'`) to avoid dealing with RubyDep and Listen.
 
 If those versions are lacking for any reason (e.g. bugs in Listen 3.0.x fixed in 3.1.x), then open a request for backporting changes to the 3.0.x branch.
 
-The idea: if you can't use the latest Ruby, then it doesn't make sense for the latest versions of other gems to work.
+The idea: if you need the latest Ruby, then you probably don't need the latest of every gem either.
 
-## 4. If all that isn't possible or it doesn't work ...
+## 5. If all that isn't possible or it doesn't work ...
 
 Let me know about it (open an issue), because I'm likely confused about how all the above steps failed.
 
