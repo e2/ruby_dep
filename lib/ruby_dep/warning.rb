@@ -27,7 +27,6 @@ module RubyDep
 
     def initialize
       @version = RubyVersion.new(RUBY_VERSION, RUBY_ENGINE)
-      @logger = Logger.new(STDERR, PREFIX)
     end
 
     def show_warnings
@@ -53,9 +52,11 @@ module RubyDep
     end
 
     def warn_ruby(msg)
-      @logger.warning(msg)
-      @logger.notice(recommendation)
-      @logger.notice(NOTICE_HOW_TO_DISABLE)
+      RubyDep.logger.tap do |logger|
+        logger.warn(PREFIX + msg)
+        logger.info(PREFIX + recommendation)
+        logger.info(PREFIX + NOTICE_HOW_TO_DISABLE)
+      end
     end
 
     def recommendation
