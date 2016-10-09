@@ -2,6 +2,46 @@
 
 [![Gem Version](https://img.shields.io/gem/v/ruby_dep.svg?style=flat)](https://rubygems.org/gems/ruby_dep) [![Build Status](https://travis-ci.org/e2/ruby_dep.svg)](https://travis-ci.org/e2/ruby_dep)
 
+## IMPORTANT!! : HOW TO CORRECTLY SOLVE ISSUES
+
+## 1. Upgrade Ruby.
+
+Ideally to the latest stable possible. It may be a little (or very!) inconvenient, but it helps everyone in the long run. 
+
+Show the awesome Ruby Core Team your support for their work by letting them focus on newer and better Rubies.
+
+## 2. Upgrade Ruby anyway.
+
+If you can't upgrade Ruby because of the environment, work out how to do so anyway.
+
+E.g. if RVM doesn't install 2.2.5 for over 5 months, then obviously that project may need help or support of some kind. Help the RVM maintainers out - they're awesome! Or, fork the project and heroically take things into your own hands.
+
+If Apple (or Amazon or whatever hosting service or company) doesn't provide the latest supported version of Ruby, use Homebrew (or build from sources) or complain to those companies to provide support. It's unfair for them to prevent users from getting better/faster Rubies.
+
+## 3. Upgrade Bundler (but even the most recent Bundler may not be enough!)
+
+Upgrade to a Bundler version that can downgrade the gems for you. This work in Bundler is ongoing, so the best version of Bundler for the job may still be an unreleased version (beta, release candidate, etc.). 
+
+Help the Bundler team out if you can - they're awesome!
+
+## 3. If all else fails, learn SemVer and USE IT!
+
+Often, there are older versions of gems that support the Ruby version you need. See http://semver.org/ on how to set versions. Check out the release notes of the gems you need to know what you're getting (or missing out on).
+
+E.g. You can downgrade to RubyDep 1.3.1 (`gem 'ruby_dep', '~> 1.3.1'`) to allow using Ruby 2.2.4
+E.g. You can use Listen 3.0.x (`gem 'listen', '~> 3.0.8'`) to avoid dealing with RubyDep.
+
+If those versions are lacking for any reason (e.g. bugs in Listen 3.0.x fixed in 3.1.x), then open a request for backporting changes to the 3.0.x branch.
+
+The idea: if you can't use the latest Ruby, then it doesn't make sense for the latest versions of other gems to work.
+
+## 4. If all that isn't possible or it doesn't work ...
+
+Let me know about it (open an issue), because I'm likely confused about how all the above steps failed.
+
+Or it's a bug I don't know about. Please report it - just in case...
+
+
 ## Description
 
 RubyDep does 2 things right now:
