@@ -2,7 +2,11 @@
 
 [![Gem Version](https://img.shields.io/gem/v/ruby_dep.svg?style=flat)](https://rubygems.org/gems/ruby_dep) [![Build Status](https://travis-ci.org/e2/ruby_dep.svg)](https://travis-ci.org/e2/ruby_dep)
 
+Avoid incompatible, slower, buggier and insecure Ruby versions.
+
 ## IMPORTANT!! : HOW TO CORRECTLY SOLVE ISSUES
+
+If you're here because you're having issues, try the following:
 
 ## 1. Upgrade Ruby.
 
