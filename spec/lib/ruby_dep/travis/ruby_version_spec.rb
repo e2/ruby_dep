@@ -1,3 +1,5 @@
+require 'ruby_dep/travis'
+
 RSpec.describe RubyDep::Travis::RubyVersion do
   subject { described_class.new(travis_version_string) }
 
