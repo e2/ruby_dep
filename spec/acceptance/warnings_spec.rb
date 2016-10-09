@@ -65,4 +65,25 @@ RSpec.describe 'warnings' do
       end
     end
   end
+
+  context 'when a logger is set manually' do
+    context 'with logger instance' do
+      let!(:spec) { 'stdout_logger.rb' }
+      let(:code) do
+        "o=`#{subcmd}`;"\
+          "expected = \"WARN;INFO;INFO;\";" \
+          "raise \"Unexpected output: \#{o.inspect}\" unless o == expected"
+      end
+      it 'uses the given logger' do
+        run_isolated(cmd)
+      end
+    end
+
+    context 'with nil' do
+      let!(:spec) { 'nil_logger.rb' }
+      it 'produces no output' do
+        run_isolated(cmd)
+      end
+    end
+  end
 end
