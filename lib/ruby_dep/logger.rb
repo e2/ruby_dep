@@ -3,6 +3,7 @@ module RubyDep
     def initialize(device, prefix)
       @device = device
       @prefix = prefix
+      ::RubyDep.logger.warn("The RubyDep::Logger class is deprecated")
     end
 
     def warning(msg)
