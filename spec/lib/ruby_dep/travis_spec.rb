@@ -10,7 +10,7 @@ RSpec.describe RubyDep::Travis do
 
     context 'with a single ruby version' do
       let(:yml) { YAML.dump('rvm' => %w(2.2.4)) }
-      it 'pessimistically locks with intial supported version' do
+      it 'pessimistically locks with initial supported version' do
         expect(subject.version_constraint).to eq(['~> 2.2', '>= 2.2.4'])
       end
     end
@@ -30,7 +30,7 @@ RSpec.describe RubyDep::Travis do
 
     context 'with a ruby prefix' do
       let(:yml) { YAML.dump('rvm' => %w(ruby-2.2.4)) }
-      it 'pessimistically locks with intial supported version' do
+      it 'pessimistically locks with initial supported version' do
         expect(subject.version_constraint).to eq(['~> 2.2', '>= 2.2.4'])
       end
     end
@@ -38,14 +38,14 @@ RSpec.describe RubyDep::Travis do
     context 'with a jruby prefix' do
       context 'with version 9.0.5.0' do
         let(:yml) { YAML.dump('rvm' => %w(jruby-9.0.5.0)) }
-        it 'pessimistically locks with correct intial supported version' do
+        it 'pessimistically locks with correct initial supported version' do
           expect(subject.version_constraint).to eq(['~> 2.2', '>= 2.2.3'])
         end
       end
 
       context 'with version 9.0.4.0' do
         let(:yml) { YAML.dump('rvm' => %w(jruby-9.0.4.0)) }
-        it 'pessimistically locks with correct intial supported version' do
+        it 'pessimistically locks with correct initial supported version' do
           expect(subject.version_constraint).to eq(['~> 2.2', '>= 2.2.2'])
         end
       end
@@ -56,7 +56,7 @@ RSpec.describe RubyDep::Travis do
           allow(subject).to receive(:abort)
         end
 
-        it 'pessimistically locks with correct intial supported version' do
+        it 'pessimistically locks with correct initial supported version' do
           expect(subject).to receive(:abort)
             .with(/Unrecognized JRuby version: "9.0.6.0"/)
           subject.version_constraint
@@ -65,14 +65,14 @@ RSpec.describe RubyDep::Travis do
 
       context 'with version 9.1.0.0' do
         let(:yml) { YAML.dump('rvm' => %w(jruby-9.1.0.0)) }
-        it 'pessimistically locks with correct intial supported version' do
+        it 'pessimistically locks with correct initial supported version' do
           expect(subject.version_constraint).to eq(['~> 2.3', '>= 2.3.0'])
         end
       end
 
       context 'with version 9.1.2.0' do
         let(:yml) { YAML.dump('rvm' => %w(jruby-9.1.2.0)) }
-        it 'pessimistically locks with correct intial supported version' do
+        it 'pessimistically locks with correct initial supported version' do
           expect(subject.version_constraint).to eq(['~> 2.3', '>= 2.3.0'])
         end
       end
