@@ -4,6 +4,7 @@ bundler_args: --without development
 env: JRUBY_OPTS='--server -Xcompile.invokedynamic=false'
 rvm:
   - 2.2.5
+  - 2.3.0
   - 2.3.1
   - jruby-9.1.2.0
 
