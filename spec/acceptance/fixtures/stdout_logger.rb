@@ -10,7 +10,7 @@ module RubyDep
 end
 
 RubyDep.logger = Logger.new(STDOUT).tap do |logger|
-  logger.formatter = proc do |severity,_,_,msg|
+  logger.formatter = proc do |severity, _, _, _msg|
     "#{severity};"
   end
 end

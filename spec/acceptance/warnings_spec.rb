@@ -71,7 +71,7 @@ RSpec.describe 'warnings' do
       let!(:spec) { 'stdout_logger.rb' }
       let(:code) do
         "o=`#{subcmd}`;"\
-          "expected = \"WARN;INFO;INFO;\";" \
+          'expected = "WARN;INFO;INFO;";' \
           "raise \"Unexpected output: \#{o.inspect}\" unless o == expected"
       end
       it 'uses the given logger' do

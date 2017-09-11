@@ -11,7 +11,7 @@ module RubyDep
 
   def self.stderr_logger
     ::Logger.new(STDERR).tap do |logger|
-      logger.formatter = proc { |_,_,_,msg| "#{msg}\n" }
+      logger.formatter = proc { |_, _, _, msg| "#{msg}\n" }
     end
   end
 
@@ -34,7 +34,7 @@ module RubyDep
     def initialize(device, prefix)
       @device = device
       @prefix = prefix
-      ::RubyDep.logger.warn("The RubyDep::Logger class is deprecated")
+      ::RubyDep.logger.warn('The RubyDep::Logger class is deprecated')
     end
 
     def warning(msg)
