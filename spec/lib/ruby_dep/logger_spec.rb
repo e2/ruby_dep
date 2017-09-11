@@ -29,7 +29,7 @@ RSpec.describe RubyDep do
 
       it 'sets up a simple formatter' do
         expect(stderr_logger).to receive(:formatter=) do |callback|
-          expect( callback.call('a', 'b', 'c', 'd')).to eq("d\n")
+          expect(callback.call('a', 'b', 'c', 'd')).to eq("d\n")
         end
         described_class.logger
       end
