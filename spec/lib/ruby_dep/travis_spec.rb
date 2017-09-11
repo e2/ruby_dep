@@ -83,6 +83,13 @@ RSpec.describe RubyDep::Travis do
           expect(subject.version_constraint).to eq(['~> 2.3', '>= 2.3.1'])
         end
       end
+
+      context 'with version 9.1.13.0' do
+        let(:yml) { YAML.dump('rvm' => %w(jruby-9.1.13.0)) }
+        it 'pessimistically locks with correct initial supported version' do
+          expect(subject.version_constraint).to eq(['~> 2.3', '>= 2.3.3'])
+        end
+      end
     end
 
     context 'with multiple versions' do
