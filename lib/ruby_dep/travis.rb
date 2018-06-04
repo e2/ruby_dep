@@ -1,3 +1,4 @@
+require 'tmpdir'
 require 'yaml'
 
 require 'ruby_dep/travis/ruby_version'

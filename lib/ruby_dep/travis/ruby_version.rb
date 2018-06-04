@@ -47,12 +47,27 @@ module RubyDep
         match[:version] # if match[:engine] == 'ruby'
       end
 
+      JRUBY_VERSIONS = {
+        '9.2.0.0' => '2.5.0',
+        '9.1.17.0' => '2.3.3',
+        '9.1.16.0' => '2.3.3',
+        '9.1.15.0' => '2.3.3',
+        '9.1.14.0' => '2.3.3',
+        '9.1.13.0' => '2.3.3',
+        '9.1.12.0' => '2.3.3',
+        '9.1.10.0' => '2.3.3',
+        '9.1.8.0' => '2.3.1',
+        '9.1.7.0' => '2.3.1',
+        '9.1.2.0' => '2.3.0',
+        '9.1.0.0' => '2.3.0',
+        '9.0.5.0' => '2.2.3',
+        '9.0.4.0' => '2.2.2'
+      }.freeze
+
       def jruby_version(version)
-        return '2.3.0' if version == '9.1.2.0'
-        return '2.3.0' if version == '9.1.0.0'
-        return '2.2.3' if version == '9.0.5.0'
-        return '2.2.2' if version == '9.0.4.0'
-        raise Error::Unrecognized::JRubyVersion, version
+        JRUBY_VERSIONS.fetch(version) do
+          raise Error::Unrecognized::JRubyVersion, version
+        end
       end
     end
   end
