@@ -27,6 +27,16 @@ RSpec.describe RubyDep::RubyVersion do
       subject { described_class.new('2.3.0', 'jruby') }
       specify { expect(subject).to be_recognized }
     end
+
+    context 'with truffleruby 1.0.0-rc2' do
+      subject { described_class.new('2.4.4', 'truffleruby') }
+      specify { expect(subject).to be_recognized }
+    end
+
+    context 'with a recent truffleruby' do
+      subject { described_class.new('2.6.1', 'truffleruby') }
+      specify { expect(subject).to be_recognized }
+    end
   end
 
   describe '#status' do
@@ -57,6 +67,16 @@ RSpec.describe RubyDep::RubyVersion do
 
     context 'with a future ruby' do
       subject { described_class.new('9.8.7', 'ruby') }
+      specify { expect(subject.status).to eq(:unknown) }
+    end
+
+    context 'with truffleruby 1.0.0-rc2' do
+      subject { described_class.new('2.4.4', 'truffleruby') }
+      specify { expect(subject.status).to eq(:unknown) }
+    end
+
+    context 'with a recent truffleruby' do
+      subject { described_class.new('2.6.1', 'truffleruby') }
       specify { expect(subject.status).to eq(:unknown) }
     end
   end
