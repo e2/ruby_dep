@@ -4,7 +4,11 @@
 
 Avoid incompatible, slower, buggier and insecure Ruby versions.
 
-## IMPORTANT!! : HOW TO CORRECTLY SOLVE ISSUES
+# Do Not Use!
+
+## This gem is no longer maintained 
+
+### Important: How to correctly solve issues
 
 If you're here because you're having issues, try the following:
 
